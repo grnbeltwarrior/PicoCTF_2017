@@ -1,0 +1,57 @@
+Given the following webpage:
+  http://shell2017.picoctf.com:4443
+
+Viewing the site with an internet browser displays the webpage. To see the html code that is being rendered, right click and view source.
+
+Alternatively you may leverage the command line using curl.
+
+gbw@grnbeltwarrior:~/PicoCTF_2017$ curl -L shell2017.picoctf.com:4443
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hello World!</title>
+<link rel="stylesheet" type="text/css" href="hacker.css">
+</head>
+<body>
+
+HI MOM! LOOK WHAT I MADE!
+
+<h1>I used some tags.</h1>
+<p>More tags!</p>
+<h3>I typed here.</h3>
+
+This is my cat. He is nice.
+<br><br>
+<img src="./cat.jpg" alt="Cat" /img>
+
+<button type="button" onclick="sayHI()"> Click me to say hello!</button>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+
+<!-- Cool! Look at me! This is an HTML file. It describes what each page contains in a format your browser can understand. -->
+<!-- The first part of the flag (there are 3 parts) is 72b28b258d2 -->
+<!-- What other types of files are there in a webpage? -->
+
+There's part of a flag in the html comments. There are href and src files linked to this page. We can further use curl or browse manually.
+
+If the files contain the word "flag" we can pipe the results of the curl command into the grep command:
+
+gbw@grnbeltwarrior:~/PicoCTF_2017$ curl -L shell2017.picoctf.com:4443/script.js | grep flag
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   236  100   236    0     0     15      0  0:00:15  0:00:15 --:--:--    57
+ * The final part of the flag is ddd5020451d
+gbw@grnbeltwarrior:~/PicoCTF_2017$ curl -L shell2017.picoctf.com:4443/hacker.css | grep flag
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:--  0:00:15 --:--:--     0The second part of the flag is b2ea021486f 
+.glyphicon-flag:before{content:"\e034"}
+100  116k  100  116k    0     0   7564      0  0:00:15  0:00:15 --:--:-- 27842
+gbw@grnbeltwarrior:~/PicoCTF_2017$ curl -L shell2017.picoctf.com:4443 | grep flag
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   686    0   686    0     0     43      0 --:--:--  0:00:15 --:--:--   166
+<!-- The first part of the flag (there are 3 parts) is 72b28b258d2 -->
